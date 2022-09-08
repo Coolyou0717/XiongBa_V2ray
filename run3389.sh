@@ -1089,6 +1089,7 @@ install() {
 	show_config_info
 	
 	fix_update_v2ray_version
+	systemctl restart v2ray
 }
 uninstall() {
 
