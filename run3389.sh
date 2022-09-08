@@ -831,15 +831,34 @@ install_v2ray() {
 	fi
 
 	# download v2ray file then install
-	
-	download_v2ray_file
 	_load download-v2ray.sh
-	#_download_v2ray_file
+	_download_v2ray_file
 	_install_v2ray_service
 	_mkdir_dir
 }
 
-download_v2ray_file() {
+fix_update_v2ray_version() {
+	#if [[ $v2ray_ver != $v2ray_latest_ver ]]; then
+	if [[ $v2ray_ver != 'v4.45.2' ]]; then
+		echo
+		echo -e " $green 咦...发现新版本耶....正在拼命更新.......$none"
+		echo
+		fix_download_v2ray_file
+		do_service restart v2ray
+		echo
+		#echo -e " $green 更新成功啦...当前 V2Ray 版本: ${cyan}$v2ray_latest_ver$none"
+		echo -e " $green 更新成功啦...当前 V2Ray 版本: v4.45.2"
+		echo
+		echo -e " $yellow 温馨提示: 为了避免出现莫名其妙的问题...V2Ray 客户端的版本最好和服务器的版本保持一致$none"
+		echo
+	else
+		echo
+		echo -e " $green 木有发现新版本....$none"
+		echo
+	fi
+}
+
+fix_download_v2ray_file() {
 	[[ -d /tmp/v2ray ]] && rm -rf /tmp/v2ray
 	mkdir -p /tmp/v2ray
 	v2ray_tmp_file="/tmp/v2ray/v2ray.zip"
@@ -1068,6 +1087,8 @@ install() {
 	get_ip
 	config
 	show_config_info
+	
+	fix_update_v2ray_version
 }
 uninstall() {
 
